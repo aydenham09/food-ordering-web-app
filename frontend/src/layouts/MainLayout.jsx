@@ -24,7 +24,7 @@ export default function MainLayout() {
         <div className="nav-container">
           <Link to="/" className="nav-brand">
             <span className="brand-icon">🍽️</span>
-            <span className="brand-text">GourmetHub</span>
+            <span className="brand-text">FoodApp</span>
           </Link>
 
           {user && (
@@ -76,9 +76,9 @@ export default function MainLayout() {
         <div className="footer-container">
           <div className="footer-brand">
             <span className="brand-icon">🍽️</span>
-            <span>GourmetHub</span>
+            <span>FoodApp</span>
           </div>
-          <p>&copy; 2026 GourmetHub. Crafted with passion for fine dining.</p>
+          <p>&copy; 2026 FoodApp. Crafted with passion for fine dining.</p>
         </div>
       </footer>
     </div>

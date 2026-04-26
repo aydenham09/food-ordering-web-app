@@ -34,7 +34,7 @@ export default function Register() {
         <div className="auth-header">
           <span className="auth-icon">🍽️</span>
           <h2>Create Account</h2>
-          <p>Join GourmetHub and elevate your dining</p>
+          <p>Join FoodApp and elevate your dining</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">

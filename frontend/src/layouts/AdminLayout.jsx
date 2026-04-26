@@ -28,7 +28,7 @@ export default function AdminLayout() {
       <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <Link to="/" className="sidebar-brand">
-            <span>🍽️</span> GourmetHub
+            <span>🍽️</span> FoodApp
           </Link>
           <button className="sidebar-close" onClick={() => setSidebarOpen(false)}><FiX /></button>
         </div>
