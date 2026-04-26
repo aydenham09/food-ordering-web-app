@@ -201,7 +201,23 @@ export const adminApi = {
   getProducts: async () => ({ data: { data: MOCK_PRODUCTS } }),
   getCategories: async () => ({ data: MOCK_CATEGORIES }),
   getOrders: async () => ({ data: { data: getMockOrders() } }),
-  getUsers: async () => ({ data: { data: [{id: 1, name: 'Admin', email: 'admin@foodapp.com', role: 'admin', orders_count: 0}] } }),
+  getUsers: async (params) => {
+    let users = [
+      {id: 1, name: 'Admin', email: 'admin@foodapp.com', role: 'admin', orders_count: 0},
+      {id: 2, name: 'John Doe', email: 'john@example.com', role: 'customer', orders_count: 5},
+      {id: 3, name: 'Jane Smith', email: 'jane@example.com', role: 'customer', orders_count: 2},
+      {id: 4, name: 'Michael Brown', email: 'michael@test.com', role: 'customer', orders_count: 0},
+      {id: 5, name: 'Sarah Wilson', email: 'sarah@demo.com', role: 'admin', orders_count: 1},
+    ];
+    if (params?.search) {
+      const s = params.search.toLowerCase();
+      users = users.filter(u => u.name.toLowerCase().includes(s) || u.email.toLowerCase().includes(s));
+    }
+    if (params?.role) {
+      users = users.filter(u => u.role === params.role);
+    }
+    return { data: { data: users } };
+  },
   getSalesReport: async () => ({ data: { total_revenue: 0, total_orders: 0, sales: [] } }),
   getPopularReport: async () => ({ data: MOCK_PRODUCTS.map(p => ({ name: p.name, order_count: p.order_count })) }),
 };

@@ -2182,3 +2182,64 @@ input, textarea, select { font-family: inherit; }
   .brand-text { font-size: 1.1rem; }
   .user-btn { max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 6px 10px; }
 }
+
+/* Admin Filters */
+.header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1;
+}
+
+.header-filters {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  max-width: 600px;
+}
+
+.admin-search-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  color: white;
+  font-size: 0.9rem;
+  flex: 2;
+  transition: all 0.3s ease;
+}
+
+.admin-search-input:focus {
+  border-color: var(--accent-orange);
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+.admin-select-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  color: white;
+  font-size: 0.9rem;
+  flex: 1;
+  cursor: pointer;
+}
+
+.admin-select-input option {
+  background: #1a1a1a;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .header-title-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .header-filters {
+    width: 100%;
+    flex-direction: column;
+  }
+}

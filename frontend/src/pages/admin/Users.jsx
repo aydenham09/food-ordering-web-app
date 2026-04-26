@@ -9,12 +9,14 @@ export default function Users() {
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'customer' });
+  const [search, setSearch] = useState('');
+  const [roleFilter, setRoleFilter] = useState('');
 
   const fetchUsers = () => {
-    adminApi.getUsers().then(res => setUsers(res.data.data)).finally(() => setLoading(false));
+    adminApi.getUsers({ search, role: roleFilter }).then(res => setUsers(res.data.data)).finally(() => setLoading(false));
   };
 
-  useEffect(() => { fetchUsers(); }, []);
+  useEffect(() => { fetchUsers(); }, [search, roleFilter]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,7 +51,27 @@ export default function Users() {
   return (
     <div className="admin-crud-page">
       <div className="crud-header">
-        <h1>Users</h1>
+        <div className="header-title-group">
+          <h1>Users</h1>
+          <div className="header-filters">
+            <input 
+              type="text" 
+              placeholder="Search by name or email..." 
+              value={search} 
+              onChange={e => setSearch(e.target.value)}
+              className="admin-search-input"
+            />
+            <select 
+              value={roleFilter} 
+              onChange={e => setRoleFilter(e.target.value)}
+              className="admin-select-input"
+            >
+              <option value="">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="customer">Customer</option>
+            </select>
+          </div>
+        </div>
         <button className="btn-primary" onClick={() => { setEditing(null); setForm({ name: '', email: '', password: '', role: 'customer' }); setShowModal(true); }}>
           <FiPlus /> Add User
         </button>
