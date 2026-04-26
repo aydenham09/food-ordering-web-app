@@ -32,7 +32,7 @@ export default function Register() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-header">
-          <span className="auth-icon">✦</span>
+          <span className="auth-icon">🍽️</span>
           <h2>Create Account</h2>
           <p>Join GourmetHub and elevate your dining</p>
         </div>
