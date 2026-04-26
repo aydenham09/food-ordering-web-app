@@ -22,7 +22,7 @@ export default function Menu() {
     setLoading(true);
     const params = { page };
     if (search) params.search = search;
-    if (activeCategory) params.category_id = activeCategory;
+    if (activeCategory) params.category = activeCategory;
 
     productApi.getAll(params).then(res => {
       setProducts(res.data.data);
