@@ -1,89 +1,209 @@
-#FoodOrderingWebApp
+# FoodApp - Food Ordering Web App
 
-A full-stack food ordering web application built using Laravel 13 as the backend API and React 19 as the frontend. This application supports product management, categories, an ordering system, and even QRIS payment simulation.
+## Deskripsi Proyek
 
-## 🚀 Core Technologies
+FoodApp adalah proyek tugas ABP Kelompok 4 berupa sistem pemesanan makanan yang dirancang untuk mendukung ekosistem cross-platform. Fokus repo ini adalah versi web yang terdiri dari frontend React untuk pelanggan dan admin, serta backend Laravel sebagai REST API terpusat.
 
-### Backend (Laravel)
-- **Framework:** Laravel 13
-- **Authentication:** Laravel Sanctum
-- **Database:** SQLite (Default)
-- **API Features:** - RESTful API for Products & Categories
-- Order & Review Management
-- Admin Dashboard & Sales Reporting
-- Product Recommendation System
+Secara konsep, aplikasi ini dibuat untuk menjawab kebutuhan operasional restoran yang fleksibel:
 
-### Frontend (React)
-- **Framework:** React 19 (Vite)
-- **Routing:** React Router DOM v7
-- **State Management & Fetching:** Axios
-- **UI Components:** Recharts (for reports), React Icons, React Hot Toast
-- **Special Features:** `qrcode.react` integration for QRIS payment simulation.
+- pelanggan dapat melihat menu, menambahkan item ke keranjang, checkout, dan melihat riwayat pesanan;
+- admin atau kasir dapat memantau pesanan, mengelola produk dan kategori, serta melihat ringkasan penjualan;
+- seluruh alur diarahkan ke satu backend agar data tetap konsisten dan mudah dikembangkan ke platform lain, termasuk mobile app pendamping.
 
-## 🛠️ Application Features
+## Tujuan Project
 
-- **User Side:**
-- Account Registration and Login.
-- Browse products by category.
-- Get product recommendations.
-- Place orders and view order history.
-- Simulate payment via QRIS.
-- Provide reviews on purchased products.
+- Membangun sistem pemesanan makanan dengan pemisahan peran `customer` dan `admin`
+- Menyediakan backend REST API sebagai pusat data aplikasi
+- Menyiapkan antarmuka web untuk pemesanan, pembayaran, dan pengelolaan data restoran
+- Menjadi fondasi integrasi lintas platform untuk web dan mobile
 
-- **Admin Side:**
-- Statistics dashboard.
-- Product and Category CRUD management.
-- Update customer order status.
-- User data management.
-- Sales and popular product reports.
+## Fitur Utama
 
-## 📦 Installation
+### Sisi Customer
+- Registrasi dan login
+- Melihat daftar menu dan detail produk
+- Menambahkan produk ke cart
+- Checkout pesanan
+- Simulasi pembayaran QRIS
+- Melihat riwayat order
+- Memberikan review produk
 
-### Prerequisites
-- PHP >= 8.3
-- Node.js & NPM
+### Sisi Admin
+- Dashboard statistik
+- CRUD produk
+- CRUD kategori
+- Monitoring dan update status pesanan
+- Manajemen user
+- Laporan penjualan dan produk populer
+
+## Arsitektur Repo
+
+```text
+food-ordering-web-app/
+|- backend/   -> Laravel 13 REST API
+|- frontend/  -> React 19 + Vite web client
+```
+
+## Teknologi yang Digunakan
+
+- Backend: Laravel 13, PHP 8.2+, Sanctum
+- Frontend: React 19, Vite, React Router
+- HTTP Client: Axios
+- UI Support: React Hot Toast, React Icons, Recharts, QR Code React
+- Database default: SQLite
+
+## Catatan Kondisi Implementasi Saat Ini
+
+README ini mengikuti kondisi kode yang ada saat ini, bukan hanya rencana di laporan:
+
+- backend sudah menyediakan REST API untuk auth, produk, kategori, order, payment, review, dan admin;
+- frontend web sudah memiliki alur halaman customer dan admin;
+- frontend saat ini masih memakai mock data untuk produk, kategori, order, payment, dan dashboard admin;
+- autentikasi frontend juga masih disimulasikan di sisi client;
+- karena itu, repo ini paling tepat dibaca sebagai progres web + API, dengan arah pengembangan menuju integrasi penuh.
+
+## Akun Demo
+
+### Seed backend
+
+Setelah menjalankan seeder backend, akun berikut tersedia:
+
+- Admin: `admin@foodapp.com` / `password`
+- Customer: `john@example.com` / `password`
+
+### Frontend saat ini
+
+Karena login frontend masih mock:
+
+- gunakan email `admin@foodapp.com` untuk masuk sebagai admin;
+- gunakan email lain apa pun untuk masuk sebagai customer;
+- password saat ini tidak divalidasi oleh frontend mock.
+
+## Tutorial Menjalankan Project
+
+### Prasyarat
+
+Pastikan perangkat sudah memiliki:
+
+- PHP 8.2 atau lebih baru
 - Composer
+- Node.js dan npm
 
-### Setup Steps
+### 1. Clone dan masuk ke project
 
-1. **Clone Repository**
 ```bash
 git clone <repository-url>
 cd food-ordering-web-app
 ```
 
-2. **Backend Setup**
-This repository provides an automated script to simplify setup:
+### 2. Setup backend Laravel
+
+Masuk ke folder backend:
+
 ```bash
 cd backend
-composer run setup
 ```
-This script will run: `composer install`, copy `.env`, generate keys, migrate databases, and install NPM backend dependencies.
 
-3. **Frontend Setup**
+Install dependency PHP:
+
+```bash
+composer install
+```
+
+Salin file environment:
+
+```bash
+copy .env.example .env
+```
+
+Buat file database SQLite:
+
+```bash
+type nul > database\database.sqlite
+```
+
+Generate app key:
+
+```bash
+php artisan key:generate
+```
+
+Jalankan migrasi dan seeder:
+
+```bash
+php artisan migrate --seed
+```
+
+Install dependency frontend internal Laravel untuk Vite backend:
+
+```bash
+npm install
+```
+
+### 3. Setup frontend React
+
+Buka terminal baru lalu masuk ke folder frontend:
+
 ```bash
 cd frontend
 npm install
 ```
 
-## 🖥️ Running the Application
+Jika ingin eksplisit menentukan URL backend, buat file `.env` di folder `frontend`:
 
-To run both services (Backend & Frontend) simultaneously, you can use the following command in the **backend** directory:
+```env
+VITE_API_URL=http://127.0.0.1:8000
+```
+
+Tanpa file ini, frontend akan memakai default `http://localhost:8000`.
+
+### 4. Jalankan aplikasi
+
+Project ini dijalankan dengan 2 terminal terpisah.
+
+Terminal 1, untuk backend Laravel:
+
+```bash
+cd backend
+php artisan serve
+```
+
+Terminal 2, untuk frontend React:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Setelah itu akses:
+
+- Frontend: `http://localhost:5173`
+- Backend API: `http://127.0.0.1:8000/api`
+
+## Alternatif Menjalankan Backend
+
+Di folder `backend`, tersedia script:
 
 ```bash
 composer run dev
 ```
-This command will run the Laravel server, queue, log pool, and Vite in parallel using `concurrently`.
 
-Or separately:
-- **Backend:** `php artisan serve` inside the `backend` folder.
-- **Frontend:** `npm run dev` inside the `frontend` folder.
+Perintah ini menjalankan server Laravel, queue listener, log watcher, dan Vite untuk backend Laravel. Namun, perintah ini tidak menjalankan frontend React di folder `frontend`, jadi frontend tetap perlu dijalankan terpisah dengan `npm run dev`.
 
-## 📂 Main Folder Structure
+## Endpoint Backend yang Sudah Tersedia
 
-- `/backend`: Contains API logic, database models (User, Product, Order, etc.), and payment integration.
+Beberapa endpoint utama yang sudah ada:
 
-- `/frontend`: Contains the user interface, React components, and application state management.
+- `POST /api/register`
+- `POST /api/login`
+- `GET /api/products`
+- `GET /api/categories`
+- `GET /api/products/recommended`
+- `GET /api/orders`
+- `POST /api/orders`
+- `POST /api/payments/{order}/simulate-qris`
+- `GET /api/admin/dashboard`
 
-## 📝 Important Note
-This application uses a token-based authentication system (Sanctum). Be sure to include the `Bearer Token` in the header of every API request that requires authentication.
+## Ringkasan
+
+Repo ini merepresentasikan bagian web dari proyek ABP FoodApp: sebuah sistem pemesanan makanan dengan peran customer dan admin, backend API terpusat, serta arah pengembangan menuju integrasi penuh lintas platform. Jika dibutuhkan, README ini masih bisa dilanjutkan dengan section deployment, ERD, atau dokumentasi API per endpoint.
