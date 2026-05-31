@@ -25,41 +25,33 @@ export function AuthProvider({ children }) {
   }, [token]);
 
   const login = async (credentials) => {
-    // Mock login taking email and password
-    const mockUser = {
-      id: 1,
-      name: credentials.email === 'admin@foodapp.com' ? 'Admin' : 'Mock User',
-      email: credentials.email,
-      role: credentials.email === 'admin@foodapp.com' ? 'admin' : 'customer'
-    };
-    const mockToken = 'mock-jwt-token-12345';
+    const response = await authApi.login(credentials);
+    const { token, user } = response.data;
     
-    localStorage.setItem('token', mockToken);
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    setToken(mockToken);
-    setUser(mockUser);
-    return { token: mockToken, user: mockUser };
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    setToken(token);
+    setUser(user);
+    return { token, user };
   };
 
   const register = async (data) => {
-    // Mock register
-    const mockUser = {
-      id: 2,
-      name: data.name,
-      email: data.email,
-      role: 'customer'
-    };
-    const mockToken = 'mock-jwt-token-67890';
+    const response = await authApi.register(data);
+    const { token, user } = response.data;
 
-    localStorage.setItem('token', mockToken);
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    setToken(mockToken);
-    setUser(mockUser);
-    return { token: mockToken, user: mockUser };
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    setToken(token);
+    setUser(user);
+    return { token, user };
   };
 
   const logout = async () => {
-    // Mock logout
+    try {
+      await authApi.logout();
+    } catch (e) {
+      // Ignore network errors on logout
+    }
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setToken(null);

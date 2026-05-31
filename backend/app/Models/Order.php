@@ -12,6 +12,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id', 'order_number', 'total_amount', 'status', 'notes',
+        'order_type', 'delivery_address', 'delivery_photo', 'table_number'
     ];
 
     protected function casts(): array

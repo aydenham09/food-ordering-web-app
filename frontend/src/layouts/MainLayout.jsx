@@ -23,7 +23,6 @@ export default function MainLayout() {
       <nav className={`navbar ${isLanding ? 'navbar--landing' : ''}`}>
         <div className="nav-container">
           <Link to="/" className="nav-brand">
-            <span className="brand-icon">🍽️</span>
             <span className="brand-text">FoodApp</span>
           </Link>
 
@@ -75,7 +74,6 @@ export default function MainLayout() {
       <footer className="footer">
         <div className="footer-container">
           <div className="footer-brand">
-            <span className="brand-icon">🍽️</span>
             <span>FoodApp</span>
           </div>
           <p>&copy; 2026 FoodApp. Crafted with passion for fine dining.</p>

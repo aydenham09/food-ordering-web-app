@@ -25,11 +25,11 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // ✅ FIX: Ganti strftime (SQLite) → MONTH/YEAR (MySQL)
+        // ✅ FIX: PostgreSQL compatibility (EXTRACT instead of MONTH/YEAR)
         $monthlySales = Order::whereIn('status', ['confirmed', 'preparing', 'completed'])
             ->select(
-                DB::raw('MONTH(created_at) as month'),
-                DB::raw('YEAR(created_at) as year'),
+                DB::raw('EXTRACT(MONTH FROM created_at) as month'),
+                DB::raw('EXTRACT(YEAR FROM created_at) as year'),
                 DB::raw('SUM(total_amount) as total'),
                 DB::raw('COUNT(*) as count')
             )

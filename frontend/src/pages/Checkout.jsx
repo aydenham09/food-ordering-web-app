@@ -13,6 +13,10 @@ export default function Checkout() {
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [notes, setNotes] = useState('');
+  const [orderType, setOrderType] = useState('take_away');
+  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [tableNumber, setTableNumber] = useState('');
+  const [deliveryPhoto, setDeliveryPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState(null);
 
@@ -30,13 +34,29 @@ export default function Checkout() {
   }
 
   const handlePlaceOrder = async () => {
+    if (orderType === 'delivery' && !deliveryAddress.trim()) return toast.error('Delivery address is required');
+    if (orderType === 'dine_in' && !tableNumber.trim()) return toast.error('Table number is required');
+
     setLoading(true);
     try {
-      const res = await orderApi.create({
-        items: items.map(i => ({ product_id: i.product_id, quantity: i.quantity })),
-        payment_method: paymentMethod,
-        notes: notes || null,
+      const formData = new FormData();
+      formData.append('payment_method', paymentMethod);
+      formData.append('order_type', orderType);
+      if (notes) formData.append('notes', notes);
+      
+      if (orderType === 'delivery') {
+        formData.append('delivery_address', deliveryAddress);
+        if (deliveryPhoto) formData.append('delivery_photo', deliveryPhoto);
+      } else if (orderType === 'dine_in') {
+        formData.append('table_number', tableNumber);
+      }
+
+      items.forEach((item, index) => {
+        formData.append(`items[${index}][product_id]`, item.product_id);
+        formData.append(`items[${index}][quantity]`, item.quantity);
       });
+
+      const res = await orderApi.create(formData);
       setOrder(res.data);
       clearCart();
       toast.success('Order placed successfully!');
@@ -112,6 +132,45 @@ export default function Checkout() {
                 <span className="option-desc">Scan QR code to pay</span>
               </label>
             </div>
+          </div>
+
+          <div className="checkout-section">
+            <h3>Order Type</h3>
+            <div className="payment-options">
+              <label className={`payment-option ${orderType === 'take_away' ? 'selected' : ''}`}>
+                <input type="radio" value="take_away" checked={orderType === 'take_away'} onChange={(e) => setOrderType(e.target.value)} />
+                🛍️ Takeaway
+              </label>
+              <label className={`payment-option ${orderType === 'dine_in' ? 'selected' : ''}`}>
+                <input type="radio" value="dine_in" checked={orderType === 'dine_in'} onChange={(e) => setOrderType(e.target.value)} />
+                🪑 Dine-in
+              </label>
+              <label className={`payment-option ${orderType === 'delivery' ? 'selected' : ''}`}>
+                <input type="radio" value="delivery" checked={orderType === 'delivery'} onChange={(e) => setOrderType(e.target.value)} />
+                🛵 Delivery
+              </label>
+            </div>
+            
+            {orderType === 'dine_in' && (
+              <div className="form-group" style={{ marginTop: 16 }}>
+                <label>Table Number</label>
+                <input type="text" placeholder="e.g. 12 or A3" value={tableNumber} onChange={e => setTableNumber(e.target.value)} />
+              </div>
+            )}
+
+            {orderType === 'delivery' && (
+              <div style={{ marginTop: 16 }}>
+                <div className="form-group">
+                  <label>Full Address</label>
+                  <textarea placeholder="Enter your full delivery address" value={deliveryAddress} onChange={e => setDeliveryAddress(e.target.value)} />
+                </div>
+                <div className="form-group" style={{ marginTop: 16 }}>
+                  <label>Drop-off Photo (Optional)</label>
+                  <input type="file" accept="image/*" onChange={e => setDeliveryPhoto(e.target.files[0])} style={{ background: 'var(--bg-tertiary)', padding: 12, borderRadius: 8, width: '100%', marginTop: 8 }} />
+                  <span className="image-upload-hint" style={{ display: 'block', marginTop: 4 }}>Upload a photo of where you want the food placed</span>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="checkout-section">

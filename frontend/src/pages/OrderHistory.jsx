@@ -60,6 +60,26 @@ export default function OrderHistory() {
                 <span className={`status-badge ${statusColors[order.status]}`}>{order.status}</span>
               </div>
 
+              <div className="order-details-info" style={{ marginTop: '1rem', padding: '0.75rem', background: 'var(--bg-secondary)', borderRadius: '8px', fontSize: '0.9rem' }}>
+                <div style={{ marginBottom: '4px' }}>
+                  <strong>Type: </strong>
+                  {order.order_type === 'take_away' ? '🛍️ Takeaway' : order.order_type === 'dine_in' ? '🪑 Dine-in' : '🛵 Delivery'}
+                </div>
+                {order.order_type === 'dine_in' && (
+                  <div><strong>Table Number:</strong> {order.table_number || '-'}</div>
+                )}
+                {order.order_type === 'delivery' && (
+                  <div>
+                    <div><strong>Delivery Address:</strong> {order.delivery_address}</div>
+                    {order.delivery_photo && (
+                      <div style={{ marginTop: '4px' }}>
+                        <a href={`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/storage/${order.delivery_photo}`} target="_blank" rel="noreferrer" style={{ color: '#3b82f6', textDecoration: 'underline' }}>📸 View Drop-off Photo</a>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
               <div className="order-items-list">
                 {order.items?.map(item => (
                   <div key={item.id} className="order-item-row">

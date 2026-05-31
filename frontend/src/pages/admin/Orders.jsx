@@ -44,13 +44,30 @@ export default function Orders() {
 
       <table className="admin-table">
         <thead>
-          <tr><th>Order #</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Actions</th></tr>
+          <tr><th>Order #</th><th>Customer</th><th>Type</th><th>Details</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Actions</th></tr>
         </thead>
         <tbody>
           {orders.map(order => (
             <tr key={order.id}>
               <td>{order.order_number}</td>
               <td>{order.user?.name}</td>
+              <td>
+                {order.order_type === 'take_away' && <span className="badge">Takeaway</span>}
+                {order.order_type === 'dine_in' && <span className="badge" style={{background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa'}}>Dine-in</span>}
+                {order.order_type === 'delivery' && <span className="badge" style={{background: 'rgba(34, 197, 94, 0.2)', color: '#4ade80'}}>Delivery</span>}
+              </td>
+              <td style={{ maxWidth: 200 }}>
+                {order.order_type === 'dine_in' && `Table: ${order.table_number || '-'}`}
+                {order.order_type === 'delivery' && (
+                  <div style={{ fontSize: 12 }}>
+                    <div>{order.delivery_address}</div>
+                    {order.delivery_photo && (
+                      <a href={`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/storage/${order.delivery_photo}`} target="_blank" rel="noreferrer" style={{ color: '#3b82f6', textDecoration: 'underline' }}>View Photo</a>
+                    )}
+                  </div>
+                )}
+                {order.order_type === 'take_away' && '-'}
+              </td>
               <td>{order.items?.length} items</td>
               <td>{formatPrice(order.total_amount)}</td>
               <td>

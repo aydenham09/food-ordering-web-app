@@ -6,7 +6,7 @@ FoodApp adalah proyek tugas ABP Kelompok 4 berupa sistem pemesanan makanan yang 
 
 Secara konsep, aplikasi ini dibuat untuk menjawab kebutuhan operasional restoran yang fleksibel:
 
-- pelanggan dapat melihat menu, menambahkan item ke keranjang, checkout, dan melihat riwayat pesanan;
+- pelanggan dapat melihat menu, menambahkan item ke keranjang, checkout (dengan opsi spesifik seperti Delivery, Dine-in, atau Takeaway), dan melihat riwayat pesanan;
 - admin atau kasir dapat memantau pesanan, mengelola produk dan kategori, serta melihat ringkasan penjualan;
 - seluruh alur diarahkan ke satu backend agar data tetap konsisten dan mudah dikembangkan ke platform lain, termasuk mobile app pendamping.
 
@@ -23,18 +23,21 @@ Secara konsep, aplikasi ini dibuat untuk menjawab kebutuhan operasional restoran
 - Registrasi dan login
 - Melihat daftar menu dan detail produk
 - Menambahkan produk ke cart
-- Checkout pesanan
+- Checkout pesanan dengan opsi pengambilan:
+  - Takeaway
+  - Dine-in (input nomor meja)
+  - Delivery (input alamat lengkap & opsional upload foto lokasi penurunan)
 - Simulasi pembayaran QRIS
 - Melihat riwayat order
 - Memberikan review produk
 
 ### Sisi Admin
 - Dashboard statistik
-- CRUD produk
+- CRUD produk (termasuk upload gambar)
 - CRUD kategori
-- Monitoring dan update status pesanan
+- Monitoring dan update status pesanan (lengkap dengan tipe pesanan, alamat, dan nomor meja)
 - Manajemen user
-- Laporan penjualan dan produk populer
+- Laporan penjualan bulanan dan produk populer
 
 ## Arsitektur Repo
 
@@ -51,6 +54,7 @@ food-ordering-web-app/
 - HTTP Client: Axios
 - UI Support: React Hot Toast, React Icons, Recharts, QR Code React
 - Database default: SQLite
+- Database live: PostgreSQL (Supabase)
 
 ## Catatan Kondisi Implementasi Saat Ini
 
@@ -61,6 +65,10 @@ README ini mengikuti kondisi kode yang ada saat ini, bukan hanya rencana di lapo
 - frontend saat ini masih memakai mock data untuk produk, kategori, order, payment, dan dashboard admin;
 - autentikasi frontend juga masih disimulasikan di sisi client;
 - karena itu, repo ini paling tepat dibaca sebagai progres web + API, dengan arah pengembangan menuju integrasi penuh.
+
+**Update Terkini (Integrasi Final):**
+- Saat ini frontend **sudah sepenuhnya terintegrasi** dengan backend Laravel dan menggunakan database PostgreSQL (Supabase) secara langsung.
+- *Mock data* sudah sepenuhnya dilepas, semua grafik penjualan, halaman laporan, manajemen pesanan, dan menu pelanggan menarik data *real-time* yang sama dari server.
 
 ## Akun Demo
 
@@ -79,6 +87,8 @@ Karena login frontend masih mock:
 - gunakan email lain apa pun untuk masuk sebagai customer;
 - password saat ini tidak divalidasi oleh frontend mock.
 
+*(Catatan: Setelah pembaruan integrasi final, login sekarang tervalidasi ke database. Silakan gunakan password yang sesuai di atas).*
+
 ## Tutorial Menjalankan Project
 
 ### Prasyarat
@@ -88,6 +98,20 @@ Pastikan perangkat sudah memiliki:
 - PHP 8.2 atau lebih baru
 - Composer
 - Node.js dan npm
+
+### 🚀 Cara Cepat (Rekomendasi)
+
+Untuk mempermudah teman-teman saat pertama kali melakukan clone repository, tersedia script setup yang akan otomatis menginstal semuanya dan langsung menyalakan server.
+
+Buka terminal di root project dan jalankan:
+```bash
+./start.sh
+```
+*(Script ini otomatis akan melakukan composer install, npm install, copy .env, migrate database, membuat storage link, lalu menjalankan `php artisan serve` dan `npm run dev` bersamaan. Cukup tekan `Ctrl+C` untuk mematikan).*
+
+---
+
+### Cara Manual
 
 ### 1. Clone dan masuk ke project
 
@@ -132,6 +156,12 @@ Jalankan migrasi dan seeder:
 
 ```bash
 php artisan migrate --seed
+```
+
+Tautkan storage lokal:
+
+```bash
+php artisan storage:link
 ```
 
 Install dependency frontend internal Laravel untuk Vite backend:

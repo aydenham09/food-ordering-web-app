@@ -42,7 +42,15 @@ class OrderController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
             'payment_method' => 'required|in:cash,qris',
             'notes' => 'nullable|string',
+            'order_type' => 'required|in:delivery,dine_in,take_away',
+            'delivery_address' => 'required_if:order_type,delivery|string|nullable',
+            'delivery_photo' => 'nullable|image|max:2048',
+            'table_number' => 'required_if:order_type,dine_in|string|nullable',
         ]);
+
+        if ($request->hasFile('delivery_photo')) {
+            $validated['delivery_photo'] = $request->file('delivery_photo')->store('delivery_photos', 'public');
+        }
 
         return DB::transaction(function () use ($request, $validated, $paymentService) {
             $totalAmount = 0;
@@ -77,6 +85,10 @@ class OrderController extends Controller
                 'total_amount' => $totalAmount,
                 'status' => 'pending',
                 'notes' => $validated['notes'] ?? null,
+                'order_type' => $validated['order_type'],
+                'delivery_address' => $validated['delivery_address'] ?? null,
+                'delivery_photo' => $validated['delivery_photo'] ?? null,
+                'table_number' => $validated['table_number'] ?? null,
             ]);
 
             $order->items()->createMany($orderItems);

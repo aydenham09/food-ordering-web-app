@@ -32,9 +32,8 @@ export default function Register() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-header">
-          <span className="auth-icon">🍽️</span>
           <h2>Create Account</h2>
-          <p>Join FoodApp and elevate your dining</p>
+          <p>Join the FoodApp community</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">

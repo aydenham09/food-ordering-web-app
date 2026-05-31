@@ -28,7 +28,6 @@ export default function Login() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-header">
-          <span className="auth-icon">🍽️</span>
           <h2>Welcome Back</h2>
           <p>Sign in to your FoodApp experience</p>
         </div>
